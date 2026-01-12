@@ -31,12 +31,17 @@ func LoadTargets(filename string) ([]Target, error) {
 		if len(record) < 2 {
 			continue // Skip invalid lines
 		}
-		// Skip header if it exists and looks like a header
-		if i == 0 && (record[0] == "url" || record[1] == "interval") {
-			continue
-		}
-
 		url := record[0]
+		// Handle BOM for Windows-created CSVs
+		if i == 0 {
+			if len(url) > 0 && url[0] == '\uFEFF' {
+				url = url[1:]
+			}
+			// Re-check headers after BOM stripping
+			if url == "url" || record[1] == "interval" {
+				continue
+			}
+		}
 		intervalSec, err := strconv.Atoi(record[1])
 		if err != nil {
 			return nil, fmt.Errorf("invalid interval on line %d: %v", i+1, err)

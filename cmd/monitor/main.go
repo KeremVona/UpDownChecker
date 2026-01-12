@@ -2,11 +2,18 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"monitor/internal/config"
 	"monitor/internal/monitor"
 	"os"
 )
+
+func waitExit() {
+	fmt.Println("\nPress Enter to exit...")
+	fmt.Scanln()
+	os.Exit(1)
+}
 
 func main() {
 	sitesFile := flag.String("sites", "sites.csv", "Path to the sites CSV file")
@@ -18,7 +25,7 @@ func main() {
 	if err != nil {
 		log.Printf("Error loading config: %v", err)
 		log.Println("Make sure config.json exists and is valid.")
-		os.Exit(1)
+		waitExit()
 	}
 
 	// Load Targets
@@ -26,12 +33,12 @@ func main() {
 	if err != nil {
 		log.Printf("Error loading targets: %v", err)
 		log.Println("Make sure sites.csv exists and is valid.")
-		os.Exit(1)
+		waitExit()
 	}
 
 	if len(targets) == 0 {
 		log.Println("No targets found in CSV.")
-		os.Exit(1)
+		waitExit()
 	}
 
 	log.Printf("Loaded %d targets. Starting monitor...", len(targets))
