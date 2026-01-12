@@ -1,0 +1,4 @@
+url,interval
+https://www.google.com,30
+https://www.github.com,60
+https://this-site-does-not-exist.com,15
