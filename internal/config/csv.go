@@ -32,10 +32,10 @@ func LoadTargets(filename string) ([]Target, error) {
 			continue // Skip invalid lines
 		}
 		url := record[0]
-		// Handle BOM for Windows-created CSVs
+		// Handle BOM for Windows-created CSVs (EF BB BF)
 		if i == 0 {
-			if len(url) > 0 && url[0] == '\uFEFF' {
-				url = url[1:]
+			if len(url) >= 3 && url[0] == 0xEF && url[1] == 0xBB && url[2] == 0xBF {
+				url = url[3:]
 			}
 			// Re-check headers after BOM stripping
 			if url == "url" || record[1] == "interval" {
