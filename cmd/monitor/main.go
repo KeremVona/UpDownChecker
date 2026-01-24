@@ -18,6 +18,7 @@ func waitExit() {
 func main() {
 	sitesFile := flag.String("sites", "sites.csv", "Path to the sites CSV file")
 	configFile := flag.String("config", "config.json", "Path to the configuration JSON file")
+	telegramToken := flag.String("telegram-token", "", "Telegram Bot Token")
 	flag.Parse()
 
 	// Load Config
@@ -26,6 +27,10 @@ func main() {
 		log.Printf("Error loading config: %v", err)
 		log.Println("Make sure config.json exists and is valid.")
 		waitExit()
+	}
+
+	if *telegramToken != "" {
+		cfg.TelegramToken = *telegramToken
 	}
 
 	// Load Targets

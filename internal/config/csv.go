@@ -11,7 +11,8 @@ import (
 type Target struct {
 	URL      string
 	Interval time.Duration
-	ToEmail  string
+	ToEmail    string
+	ToTelegram string
 }
 
 func LoadTargets(filename string) ([]Target, error) {
@@ -58,6 +59,10 @@ func LoadTargets(filename string) ([]Target, error) {
 			Interval: time.Duration(intervalSec) * time.Second,
 			ToEmail:  toEmail,
 		})
+		
+		if len(record) >= 4 {
+			targets[len(targets)-1].ToTelegram = record[3]
+		}
 	}
 
 	return targets, nil

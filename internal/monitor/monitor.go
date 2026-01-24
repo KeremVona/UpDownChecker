@@ -46,6 +46,14 @@ func checkAndNotify(cfg *config.Config, target config.Target) {
 		} else {
 			log.Printf("Alert sent for %s", target.URL)
 		}
+
+		if target.ToTelegram != "" {
+			if sendErr := notifier.SendTelegramAlert(cfg, target.URL, target.ToTelegram, err); sendErr != nil {
+				log.Printf("Failed to send telegram alert for %s: %v", target.URL, sendErr)
+			} else {
+				log.Printf("Telegram alert sent for %s", target.URL)
+			}
+		}
 	} else {
 		log.Printf("[UP] %s", target.URL)
 	}

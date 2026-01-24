@@ -11,7 +11,8 @@ type Config struct {
 	SMTPUser  string `json:"smtp_user"`
 	SMTPPass  string `json:"smtp_pass"`
 	FromEmail string `json:"from_email"`
-	ToEmail   string `json:"to_email"`
+	ToEmail       string `json:"to_email"`
+	TelegramToken string `json:"telegram_token"`
 }
 
 func LoadConfig(filename string) (*Config, error) {

@@ -6,6 +6,7 @@ A simple CLI tool written in Go to monitor the uptime of websites and send email
 - Monitors a list of websites defined in a CSV file.
 - configurable check intervals per website.
 - Sends email alerts via SMTP when a website is unreachable (non-200 status or network error).
+- Sends Telegram alerts (optional).
 - Cross-platform (Windows/Linux/macOS).
 
 ## Prerequisites
@@ -14,11 +15,11 @@ A simple CLI tool written in Go to monitor the uptime of websites and send email
 ## Configuration
 
 ### 1. Targets (`sites.csv`)
-Make a file named `sites.csv` with `url` and `interval`, and `email` columns. The interval is in seconds.
+Make a file named `sites.csv` with `url`, `interval`, `email` (optional), and `telegram_chat_id` (optional) columns. The interval is in seconds.
 ```csv
-url,interval,email
-https://google.com,30,
-https://github.com,60,
+url,interval,email,telegram
+https://google.com,30,,
+https://github.com,60,admin@example.com,123456789
 ```
 *Note: The tool handles CSVs made by Excel (with BOM).*
 
@@ -55,8 +56,8 @@ GOOS=windows GOARCH=amd64 go build -o monitor.exe cmd/monitor/main.go
 ```
 
 ## Usage
-By default, the tool looks for `sites.csv` and `config.json` in the current directory. You can specify different paths:
+By default, the tool looks for `sites.csv` and `config.json` in the current directory. You can specify different paths and provide a Telegram Bot Token:
 
 ```bash
-./monitor --sites my-sites.csv --config my-config.json
+./monitor --sites my-sites.csv --config my-config.json --telegram-token "YOUR_BOT_TOKEN"
 ```
