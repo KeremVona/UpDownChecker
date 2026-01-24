@@ -41,7 +41,7 @@ func checkAndNotify(cfg *config.Config, target config.Target) {
 	err := checker.Check(target.URL)
 	if err != nil {
 		log.Printf("[DOWN] %s - Error: %v", target.URL, err)
-		if sendErr := notifier.SendAlert(cfg, target.URL, err); sendErr != nil {
+		if sendErr := notifier.SendAlert(cfg, target.URL, target.ToEmail, err); sendErr != nil {
 			log.Printf("Failed to send alert for %s: %v", target.URL, sendErr)
 		} else {
 			log.Printf("Alert sent for %s", target.URL)

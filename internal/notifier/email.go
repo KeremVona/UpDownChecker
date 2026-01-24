@@ -7,8 +7,13 @@ import (
 	"strings"
 )
 
-func SendAlert(cfg *config.Config, targetURL string, checkErr error) error {
+func SendAlert(cfg *config.Config, targetURL string, toEmail string, checkErr error) error {
 	auth := smtp.PlainAuth("", cfg.SMTPUser, cfg.SMTPPass, cfg.SMTPHost)
+
+	recipient := cfg.ToEmail
+	if toEmail != "" {
+		recipient = toEmail
+	}
 
 	subject := "Website Down Alert: " + targetURL
 	body := fmt.Sprintf("Alert! The website %s is down.\n\nError: %v\n\nTime: %s",
@@ -17,7 +22,7 @@ func SendAlert(cfg *config.Config, targetURL string, checkErr error) error {
 	msg := []byte(fmt.Sprintf("To: %s\r\n"+
 		"Subject: %s\r\n"+
 		"\r\n"+
-		"%s\r\n", cfg.ToEmail, subject, body))
+		"%s\r\n", recipient, subject, body))
 
 	addr := fmt.Sprintf("%s:%d", cfg.SMTPHost, cfg.SMTPPort)
 
@@ -26,11 +31,11 @@ func SendAlert(cfg *config.Config, targetURL string, checkErr error) error {
 	// If the user provided no user/pass, we might skip auth? 
 	// For now, adhering to the plan which includes user/pass.
 	
-	err := smtp.SendMail(addr, auth, cfg.FromEmail, []string{cfg.ToEmail}, msg)
+	err := smtp.SendMail(addr, auth, cfg.FromEmail, []string{recipient}, msg)
 	if err != nil {
 		// Try without auth if auth failed or wasn't provided (simple safeguard)
 		if cfg.SMTPUser == "" || cfg.SMTPPass == "" {
-			err = smtp.SendMail(addr, nil, cfg.FromEmail, []string{cfg.ToEmail}, msg)
+			err = smtp.SendMail(addr, nil, cfg.FromEmail, []string{recipient}, msg)
 		}
 	}
 	

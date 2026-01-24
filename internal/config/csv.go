@@ -11,6 +11,7 @@ import (
 type Target struct {
 	URL      string
 	Interval time.Duration
+	ToEmail  string
 }
 
 func LoadTargets(filename string) ([]Target, error) {
@@ -47,9 +48,15 @@ func LoadTargets(filename string) ([]Target, error) {
 			return nil, fmt.Errorf("invalid interval on line %d: %v", i+1, err)
 		}
 
+		toEmail := ""
+		if len(record) >= 3 {
+			toEmail = record[2]
+		}
+
 		targets = append(targets, Target{
 			URL:      url,
 			Interval: time.Duration(intervalSec) * time.Second,
+			ToEmail:  toEmail,
 		})
 	}
 
