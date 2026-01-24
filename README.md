@@ -14,11 +14,11 @@ A simple CLI tool written in Go to monitor the uptime of websites and send email
 ## Configuration
 
 ### 1. Targets (`sites.csv`)
-Make a file named `sites.csv` with `url` and `interval` columns. The interval is in seconds.
+Make a file named `sites.csv` with `url` and `interval`, and `email` columns. The interval is in seconds.
 ```csv
-url,interval
-https://google.com,30
-https://github.com,60
+url,interval,email
+https://google.com,30,
+https://github.com,60,
 ```
 *Note: The tool handles CSVs made by Excel (with BOM).*
 
